@@ -1,0 +1,22 @@
+{
+  "name": "band_activity_model",
+  "algorithm": "RandomForestClassifier",
+  "trees": 200,
+  "max_depth": 6,
+  "features": [
+    "prev_hit",
+    "recent_hit_rate",
+    "windows_since_hit",
+    "avg_amplitude"
+  ],
+  "input": "per-band (n, 4) -> P(active next window)",
+  "target": "hit in next window (shifted, no leak)",
+  "metric": {
+    "test_accuracy": 0.937,
+    "activity_recall": 0.81
+  },
+  "source": "TSRD (Turing Synthetic Radar Dataset), 100ms windows, 10 bands",
+  "sklearn": "1.9.0",
+  "integrated_at": "2026-08-29T17:53:30Z",
+  "scheduler": "rfi_ucb (ML prior blended into UCB1, lambda=0.5)"
+}

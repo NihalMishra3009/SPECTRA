@@ -1,0 +1,11 @@
+{
+  "source": "demo (numpy softmax on built-in RF simulator)",
+  "artifact": "turing_model.pkl",
+  "features": "2*n_bands+1  (hit_ewma[n] ++ tanh(misses/5)[n] ++ t_frac)",
+  "contract": "predict(X) | predict_proba(X) -> (N, C) scores",
+  "integrated_at": "2026-08-29T17:27:50Z",
+  "eval": {
+    "smart_ir": 100.0,
+    "baseline_ir": 100.0
+  }
+}

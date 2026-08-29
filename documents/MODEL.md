@@ -1,7 +1,8 @@
 # MODELS — Training Pipeline (offline · local · CPU · free)
 
-Everything trains on your machine in minutes and is saved to
-**`backend/app/train/artifacts/`**. No GPU, no cloud needed.
+Everything trains on your machine in minutes and is saved to the repo-level
+**`model/artifacts/`** folder (single place for every model). No GPU, no cloud
+needed. Training *scripts* stay in `backend/app/train/`.
 
 ## Artifacts registry
 
@@ -11,6 +12,7 @@ Everything trains on your machine in minutes and is saved to
 | PPO | `ppo.zip` + `ppo_meta.json` + `ppo_curves.json` | Stable-Baselines3 `MlpPolicy` |
 | Bandit baseline | `bandit_baseline.json` | catalog evals (fairness reference) |
 | Sequence LSTM | `sequence.pt` + `meta.json` + `sequence_curves.json` | PyTorch LSTM (next-band + quiet) |
+| Friend RF (rfi_ucb) | `band_activity_model.pkl` + `rfi_ucb_meta.json` | TSRD-trained RandomForest → UCB1 prior (sklearn 1.9) |
 
 ## Train (from `backend/`)
 
@@ -21,7 +23,7 @@ Everything trains on your machine in minutes and is saved to
 .\.venv\Scripts\python -m app.train.train_bandit
 ```
 
-> Trained artifacts are already committed in `app/train/artifacts/` — the demo
+> Trained artifacts are already committed in `model/artifacts/` — the demo
 > runs with zero training.
 
 ## RL observation space (shared train ⇄ inference)

@@ -41,7 +41,7 @@ npm run dev
 Open **http://localhost:5173**, press **▶ RUN SIMULATION** (or **▶ DEMO MODE**
 for the 4-scenario guided script) and watch the animated waterfall.
 
-> Old trained models are already in `backend/app/train/artifacts/` — no training
+> Old trained models are already in `model/artifacts/` — no training
 > needed for the demo.
 >
 > **No backend? No worries.** Use **⚡ LOAD MOCK DATA** in the config panel — a
@@ -59,7 +59,9 @@ RF env (ground truth) → receiver scans 1 band → hit/miss → scheduler updat
 
 - **Baseline** (`round_robin`): the open-loop fixed sweep used by legacy systems.
 - **Smart schedulers**: `epsilon_greedy` · `ucb1` · `thompson` · `rl_dqn` ·
-  `rl_ppo` (Stable-Baselines3) · `sequence` (LSTM timing/hop predictor).
+  `rl_ppo` (Stable-Baselines3) · `sequence` (LSTM timing/hop predictor) ·
+  `dataset_rfi` · `rfi_ucb` (TSRD-trained RandomForest advisor blended into
+  UCB1 — friend's model). See `documents/MODEL_CONTRACT.md`.
 - **Adaptation**: EWMA recency decay (α) — old evidence fades, pattern switches
   re-prioritize the scheduler in a few steps.
 - **Exploration floor**: guaranteed broad-sweep coverage keeps surprise emitters
@@ -101,6 +103,7 @@ documents/        Submission report, problem statement, all project docs
 - **[documents/BACKEND.md](documents/BACKEND.md)** — architecture, API, adding scenarios/schedulers, tests
 - **[documents/FRONTEND.md](documents/FRONTEND.md)** — dashboard structure, theme, playback, deploy
 - **[documents/MODEL.md](documents/MODEL.md)** — training pipeline, results, retrain commands
+- **[documents/MODEL_CONTRACT.md](documents/MODEL_CONTRACT.md)** — drop-in spec for externally trained emitter models
 
 ## Validation
 

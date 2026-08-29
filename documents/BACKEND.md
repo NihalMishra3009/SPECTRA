@@ -16,11 +16,13 @@ python -m venv .venv
 ```powershell
 .\.venv\Scripts\python -m pytest tests -q
 ```
-**30 passing** = `test_engine.py` (12: scenarios, schedulers, adaptation,
-priorities) + `test_api.py` (18: full REST surface + WebSocket stream +
-validation). API tests cover every endpoint, `POST /api/simulate` across all
-14 scenarios **and** all 8 schedulers, deterministic-seed replay, 400/422
-error handling, and `/ws/simulate` streaming + bad-payload fallback.
+**49 passing** = `test_engine.py` (12) + `test_api.py` (18: full REST surface +
+WebSocket stream + validation) + `test_db.py` (6: SQLite persistence) +
+`test_dataset_rfi.py` (8) + `test_rfi_ucb.py` (5: friend's RandomForest
+integration). API tests cover every endpoint, `POST /api/simulate` across all
+14 scenarios **and** all 10 schedulers, deterministic-seed replay, 400/422
+error handling, `/ws/simulate` streaming + bad-payload fallback, and both
+external-model contracts.
 
 ## Module map
 
@@ -42,8 +44,12 @@ app/
 │     ├─ bandit.py      EpsilonGreedy · UCB1 · ThompsonSampling (EWMA recency + sweep floor)
 │     ├─ adaptive.py    SlidingWindow (windowed recency)
 │     ├─ rl_policy.py   RlPolicyScheduler — serves SB3 artifact + build_obs()
-│     └─ sequence.py    SequenceScheduler — serves LSTM timing/hop predictor
+│     ├─ sequence.py    SequenceScheduler — serves LSTM timing/hop predictor
+│     ├─ dataset_rfi.py DatasetRFIScheduler — serves an external dataset-trained model
+│     └─ rfi_ucb.py     RFIUCBScheduler — friend's RandomForest prior blended into UCB1
 ├─ train/               Offline training scripts (see MODEL.md) + artifacts/
+│   ├─ rfi_model.py     importable demo model class (pickle-safe)
+│   └─ integrate_dataset_model.py  drop-in CLI for your trained model (see MODEL_CONTRACT.md)
 └─ data/turing_loader.py  HF Turing radar dataset seam (Phase 5)
 ```
 
@@ -57,10 +63,6 @@ app/
   hit segments / total segments. This is the honest EW definition (not per-cell).
 - **Real frequency grid** — each abstract band maps to a real GHz sub-range
   (see *Real frequency mapping* below); the emitter's band = its operating freq.
-
-Add a scheduler → add the class in `app/sim/schedulers/`, register it in
-`app/config.py:SCHEDULERS` and `engine.make_scheduler`. Add a scenario → add an
-`Emitter` factory in `app/sim/scenarios.py` and a catalog entry.
 - **Adaptation speed** = time steps from the first ground-truth *change* event to
   the smart scheduler's first hit on a newly-active band.
 - **Scheduler protocol**: `tick(t) → select(t) → update(band, hit, t)`.
@@ -78,6 +80,9 @@ Add a scheduler → add the class in `app/sim/schedulers/`, register it in
 | `GET  /api/curves/<file>` | training curves JSON |
 | `POST /api/simulate` | full run JSON (replay-able) |
 | `WS   /ws/simulate` | per-step live telemetry stream |
+| `GET /api/db/runs` | recorded runs (SQLite) |
+| `GET /api/db/runs/{run_id}` | full stored run |
+| `GET /api/db/stats` | persistence totals + best run |
 
 `POST /api/simulate` validates the request: an unknown `scenario` or
 `scheduler` returns **`400`** with a clear detail message; out-of-range numeric

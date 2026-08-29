@@ -49,7 +49,7 @@ freq_start_ghz=2.0 · freq_end_ghz=18.0   ← real RF grid for the bands
 ```
 
 - `SCHEDULERS` — registry: `round_robin, epsilon_greedy, ucb1, thompson,
-  adaptive_window, rl_dqn, rl_ppo, sequence` (+ each one's demo defaults).
+  adaptive_window, rl_dqn, rl_ppo, sequence, dataset_rfi, rfi_ucb` (+ each one's demo defaults).
 - A REST/WS request carries exactly this object → deterministic run.
 
 ## 2. Scenario build — `app/sim/scenarios.py`
@@ -86,6 +86,8 @@ ucb1 / thompson → bandits with same decay + floor
 adaptive_window → sliding-window recency
 rl_dqn/rl_ppo   → loads SB3 artifact (dqn.zip/ppo.zip), obs=building 2n+1
 sequence        → loads LSTM (sequence.pt), predicts next band timing
+dataset_rfi     → loads dataset-trained emitter model (turing_model.pkl)
+rfi_ucb         → friend's RandomForest band-activity prior → blends into UCB1
 ```
 
 SB3/torch are imported lazily so the API boots fast even without artifacts.
@@ -169,9 +171,10 @@ Demo Mode auto-plays 4 scenarios (stable→surprise→periodic LSTM→hopper) at
 ## 10. Validation
 
 ```
-pytest            → 30 tests (12 engine + 18 API: all REST endpoints, all 14
-                     scenarios × all 8 schedulers simulate, deterministic replay,
-                     400 validation, 422 bounds, WebSocket stream + fallback)
+pytest            → 49 tests (12 engine + 18 API + 6 SQLite + 8 dataset-model + 5 friend-RF):
+                     all REST endpoints, all 14 scenarios × all 10 schedulers
+                     simulate, deterministic replay, 400/422 validation,
+                     WebSocket stream + fallback, dataset_rfi + rfi_ucb integrations
 train_bandit      → catalog table (thompson 66.0% > … 59.5%)
 mock fixture      → frontend/public/mock/demo.json (92 KB deterministic run)
 ```

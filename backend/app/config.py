@@ -28,6 +28,8 @@ SCHEDULERS = {
     "rl_dqn": "Trained DQN policy (Stable-Baselines3)",
     "rl_ppo": "Trained PPO policy (Stable-Baselines3)",
     "sequence": "Sequence-aware LSTM timing/hop predictor",
+    "dataset_rfi": "Dataset-trained emitter model (Turing/PDW predictor)",
+    "rfi_ucb": "Friend's RandomForest band-activity model blended into UCB1",
 }
 
 DEFAULT_DEMO = {

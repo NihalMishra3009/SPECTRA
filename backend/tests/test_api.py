@@ -48,7 +48,7 @@ def test_schedulers():
     r = client.get("/api/schedulers")
     assert r.status_code == 200
     scheds = r.json()["schedulers"]
-    assert len(scheds) == 8
+    assert len(scheds) == 10
     assert set(SCHEDULERS) == {s["id"] for s in scheds}
     assert r.json()["defaults"] == DEFAULT_DEMO
 
@@ -69,7 +69,7 @@ def test_models_all_present():
     assert r.status_code == 200
     models = r.json()["models"]
     ids = {m["scheduler"]: m for m in models}
-    assert set(ids) == {"rl_dqn", "rl_ppo", "bandit_baseline", "sequence"}
+    assert set(ids) == {"rl_dqn", "rl_ppo", "bandit_baseline", "sequence", "dataset_rfi", "rfi_ucb"}
     for m in models:
         assert m["present"] is True, f"{m['scheduler']} artifact missing"
 

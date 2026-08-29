@@ -14,8 +14,10 @@ from .scenarios import get_emitters, scenario_catalog
 def make_scheduler(scheduler_id: str, config: SimConfig, seed: int, n_bands: int):
     """Instantiates the requested scheduler (bandit / RL / sequence / baseline)."""
     from .schedulers import (  # local import avoids hard SB3/torch dependency at boot
+        DatasetRFIScheduler,
         EpsilonGreedy,
         RlPolicyScheduler,
+        RFIUCBScheduler,
         RoundRobin,
         SequenceScheduler,
         SlidingWindow,
@@ -43,6 +45,28 @@ def make_scheduler(scheduler_id: str, config: SimConfig, seed: int, n_bands: int
         from ..train import ARTIFACTS_DIR
 
         return SequenceScheduler(n_bands, ARTIFACTS_DIR, seed=seed, alpha=config.alpha)
+    if scheduler_id == "dataset_rfi":
+        from ..train import ARTIFACTS_DIR
+
+        return DatasetRFIScheduler(
+            n_bands,
+            artifact=str(ARTIFACTS_DIR / "turing_model.pkl"),
+            seed=seed,
+            alpha=config.alpha,
+            epsilon=config.epsilon,
+            floor=config.floor,
+            n_steps=config.n_steps,
+        )
+    if scheduler_id == "rfi_ucb":
+        from ..train import ARTIFACTS_DIR
+
+        return RFIUCBScheduler(
+            n_bands,
+            artifact=str(ARTIFACTS_DIR / "band_activity_model.pkl"),
+            seed=seed,
+            alpha=config.alpha,
+            floor=config.floor,
+        )
     raise ValueError(f"unknown scheduler: {scheduler_id}")
 
 

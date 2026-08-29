@@ -14,9 +14,9 @@
 
 SPECTRA is a closed-loop, machine-learning-based scan scheduler for Electronic Support (ES) receivers. It replaces the traditional fixed, open-loop sweep with a system that learns from real-time hit/miss feedback, adapts when emitter behaviour changes, and predicts where to scan next — improving interception rate and cutting intercept time, without relying on prior intelligence about emitters.
 
-The system is fully built end-to-end: a physics-flavoured RF simulation engine, eight interchangeable scheduling algorithms (from simple bandits to trained Deep RL and LSTM sequence models), a FastAPI serving layer with REST and WebSocket streaming, and a live React dashboard with waterfall visualization, KPI cards, and scenario-driven demo mode.
+The system is fully built end-to-end: a physics-flavoured RF simulation engine, ten interchangeable scheduling algorithms (bandits, Deep RL, LSTM timing, plus a dataset-trained RandomForest advisor blended into UCB1), a FastAPI serving layer with REST and WebSocket streaming, and a live React dashboard with waterfall visualization, KPI cards, and scenario-driven demo mode.
 
-| 14 Scenarios | 8 Schedulers | 7 PS Metrics | 30 Tests Passing | Live WebSocket Demo |
+| 14 Scenarios | 10 Schedulers | 7 PS Metrics | 49 Tests Passing | Live WebSocket Demo |
 |---|---|---|---|---|
 
 ---
@@ -60,9 +60,9 @@ scenario evals -> bandit_baseline.json      -/   loop t=0..T-1: tick -> select -
 | `app/sim/engine.py` | Control loop, run_simulation (baseline vs smart), make_scheduler |
 | `app/sim/metrics.py` | compute_metrics — the 7 PS figures of merit |
 | `app/sim/gym_env.py` | Gymnasium-compatible env used for SB3 training |
-| `app/sim/schedulers/*.py` | baseline · bandit (ε-greedy/UCB1/Thompson) · adaptive · rl_policy · sequence |
-| `app/train/*.py` | train_dqn, train_ppo, train_sequence, train_bandit, seq_model |
-| `app/train/artifacts/` | dqn.zip, ppo.zip, sequence.pt, *_meta.json, *_curves.json, bandit_baseline.json |
+| `app/sim/schedulers/*.py` | baseline · bandit (ε-greedy/UCB1/Thompson) · adaptive · rl_policy · sequence · dataset_rfi |
+| `app/train/*.py` | train_dqn, train_ppo, train_sequence, train_bandit, seq_model, rfi_model, integrate_dataset_model |
+| `model/artifacts/` | dqn.zip, ppo.zip, sequence.pt, turing_model.pkl, *_meta.json, *_curves.json, bandit_baseline.json |
 | `app/api/routes.py` | REST + WebSocket endpoints |
 | `data/turing_loader.py` | Turing Synthetic Radar Dataset integration seam (Phase 5) |
 | `tests/test_engine.py` | 12 pytest cases — scenarios, schedulers, adaptation, priorities |
@@ -95,6 +95,8 @@ scenario evals -> bandit_baseline.json      -/   loop t=0..T-1: tick -> select -
 | `adaptive_window` | Sliding-window recency estimate |
 | `rl_dqn` / `rl_ppo` | Stable-Baselines3 policy inference from trained dqn.zip / ppo.zip |
 | `sequence` | PyTorch LSTM (sequence.pt) predicting next active band and timing |
+| `dataset_rfi` | Externally trained emitter model (Turing/PDW) → per-band scores |
+| `rfi_ucb` | Friend's RandomForest band-activity prior (TSRD) blended into UCB1 |
 
 SB3 and torch are imported lazily so the API remains fast to boot even when trained artifacts are absent.
 
@@ -158,7 +160,7 @@ Training is offline and seeded; artifacts ship inside the repository so the live
 
 ## 09 · Validation & Test Coverage
 
-- **pytest — 30 cases**: scenario generation, bandit beats baseline on stable pattern, periodic capture via Thompson Sampling, surprise detection, adaptation speed, priority trajectory, plus a full API test suite (health, scenarios, schedulers, models, curves, simulate across all 8 schedulers & all 14 scenarios, deterministic-seed replay, 400 validation, 422 bounds, WebSocket streaming + fallback).
+- **pytest — 49 cases**: scenario generation, bandit beats baseline, periodic capture via Thompson Sampling, surprise detection, adaptation speed, dataset-model + friend-RF integration, plus a full API test suite (health, scenarios, schedulers, models, curves, simulate across all 10 schedulers & all 14 scenarios, deterministic-seed replay, 400 validation, 422 bounds, WebSocket + fallback) and SQLite persistence tests.
 - **train_bandit catalog** — Thompson Sampling leads at **66.0%** interception vs ≈**59.5%** for weaker baselines on the evaluated scenario set.
 - **Offline mock fixture** — `frontend/public/mock/demo.json` (92 KB deterministic run) lets the dashboard demo without a live backend.
 
