@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-void: #04060c;
+  --color-void2: #070b14;
+  --color-panel: #0a111f;
+  --color-inner: #0e1626;
+  --color-line: #1b2a44;
+  --color-neon: #00e5ff;
+  --color-neon2: #7dd3fc;
+  --color-amber: #ffb020;
+  --color-hit: #22e584;
+  --color-miss: #ff4d6d;
+  --color-dim: #7b8aa6;
+  --color-grid: rgba(0, 229, 255, 0.06);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  @apply bg-void text-slate-200 font-sans antialiased;
+  background-image:
+    radial-gradient(1200px 500px at 85% -10%, rgba(0, 229, 255, 0.08), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(255, 176, 32, 0.05), transparent 55%),
+    linear-gradient(rgba(0, 229, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.022) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+}
+
+@layer components {
+  .panel {
+    @apply relative rounded-2xl border border-line bg-panel/80 backdrop-blur-md;
+    box-shadow: 0 18px 50px -22px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+  .panel-title {
+    @apply font-display text-[11px] font-semibold tracking-[0.22em] text-dim uppercase;
+  }
+  .kpi-card {
+    @apply rounded-xl border border-line/70 bg-inner/80 px-4 py-3;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-line px-3 py-2 text-sm font-medium transition-all duration-150 cursor-pointer select-none;
+  }
+  .btn:hover {
+    @apply border-neon/60 text-neon;
+  }
+  .btn-primary {
+    @apply border-neon/60 bg-neon/10 text-neon shadow-[0_0_24px_-6px_rgba(0,229,255,0.5)];
+  }
+  .btn-ghost {
+    @apply border-line bg-inner/50 text-slate-300;
+  }
+  .num {
+    @apply font-mono tabular-nums;
+  }
+  .scroll-slim::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scroll-slim::-webkit-scrollbar-thumb {
+    background: #1b2a44;
+    border-radius: 999px;
+  }
+  input[type="range"] {
+    @apply accent-neon;
+  }
+}

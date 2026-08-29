@@ -1,0 +1,13 @@
+{
+  "model": "lstm",
+  "n_bands": 10,
+  "window": 20,
+  "layers": 1,
+  "hidden": 64,
+  "epochs": 40,
+  "episodes": 1200,
+  "seed": 0,
+  "threshold": 0.55,
+  "final_val_acc": 0.9536,
+  "wall_seconds": 222.5
+}

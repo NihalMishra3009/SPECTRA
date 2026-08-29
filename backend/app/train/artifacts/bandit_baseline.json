@@ -1,0 +1,83 @@
+{
+  "schedulers": [
+    "epsilon_greedy",
+    "ucb1",
+    "thompson",
+    "adaptive_window"
+  ],
+  "summary": {
+    "epsilon_greedy": {
+      "mean_interception_pct": 63.45,
+      "per_scenario": {
+        "stable": 100.0,
+        "switch": 100.0,
+        "single_dominant": 100.0,
+        "multi_equal": 100.0,
+        "random": 9.4,
+        "surprise": 100.0,
+        "periodic": 5.56,
+        "hopper": 1.98,
+        "burst": 6.38,
+        "multi_sim": 100.0,
+        "noise": 100.0,
+        "threat": 1.47,
+        "stable_switch_surprise": 100.0
+      }
+    },
+    "ucb1": {
+      "mean_interception_pct": 65.3,
+      "per_scenario": {
+        "stable": 100.0,
+        "switch": 100.0,
+        "single_dominant": 100.0,
+        "multi_equal": 100.0,
+        "random": 9.4,
+        "surprise": 100.0,
+        "periodic": 11.11,
+        "hopper": 8.91,
+        "burst": 10.64,
+        "multi_sim": 100.0,
+        "noise": 100.0,
+        "threat": 8.82,
+        "stable_switch_surprise": 100.0
+      }
+    },
+    "thompson": {
+      "mean_interception_pct": 66.04,
+      "per_scenario": {
+        "stable": 100.0,
+        "switch": 100.0,
+        "single_dominant": 100.0,
+        "multi_equal": 100.0,
+        "random": 8.72,
+        "surprise": 100.0,
+        "periodic": 16.67,
+        "hopper": 7.92,
+        "burst": 14.89,
+        "multi_sim": 100.0,
+        "noise": 100.0,
+        "threat": 10.29,
+        "stable_switch_surprise": 100.0
+      }
+    },
+    "adaptive_window": {
+      "mean_interception_pct": 59.47,
+      "per_scenario": {
+        "stable": 100.0,
+        "switch": 100.0,
+        "single_dominant": 100.0,
+        "multi_equal": 100.0,
+        "random": 10.74,
+        "surprise": 50.0,
+        "periodic": 5.56,
+        "hopper": 26.73,
+        "burst": 2.13,
+        "multi_sim": 75.0,
+        "noise": 100.0,
+        "threat": 2.94,
+        "stable_switch_surprise": 100.0
+      }
+    }
+  },
+  "seed": 42
+}

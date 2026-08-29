@@ -1,0 +1,21 @@
+{
+  "algo": "ppo",
+  "framework": "stable-baselines3",
+  "obs_dim": 21,
+  "n_bands": 10,
+  "episode_steps": 200,
+  "total_timesteps": 40000,
+  "seed": 0,
+  "training_palette": [
+    "stable",
+    "switch",
+    "surprise",
+    "hopper",
+    "burst",
+    "multi_sim",
+    "periodic",
+    "random"
+  ],
+  "wall_seconds": 45.6,
+  "final_interception_pct": 31.25
+}

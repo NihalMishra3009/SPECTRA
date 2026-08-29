@@ -1,0 +1,18 @@
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Database (runtime files — schema lives in database/schema.sql)
+database/*.db
+database/*.db-wal
+database/*.db-shm
+
+# OS
+.DS_Store
+Thumbs.db

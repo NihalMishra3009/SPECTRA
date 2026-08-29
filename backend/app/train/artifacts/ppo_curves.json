@@ -1,0 +1,32 @@
+[
+  {
+    "timestep": 6000,
+    "mean_reward": 50.0,
+    "mean_interception": 31.25
+  },
+  {
+    "timestep": 12000,
+    "mean_reward": 50.0,
+    "mean_interception": 31.25
+  },
+  {
+    "timestep": 18000,
+    "mean_reward": 50.0,
+    "mean_interception": 31.25
+  },
+  {
+    "timestep": 24000,
+    "mean_reward": 50.0,
+    "mean_interception": 31.25
+  },
+  {
+    "timestep": 30000,
+    "mean_reward": 50.0,
+    "mean_interception": 31.25
+  },
+  {
+    "timestep": 36000,
+    "mean_reward": 50.0,
+    "mean_interception": 31.25
+  }
+]

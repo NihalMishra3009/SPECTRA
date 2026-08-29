@@ -1,0 +1,252 @@
+[
+  {
+    "timestep": 4000,
+    "mean_reward": 128.188,
+    "mean_interception": 59.81
+  },
+  {
+    "timestep": 8000,
+    "mean_reward": 18.875,
+    "mean_interception": 32.63
+  },
+  {
+    "timestep": 12000,
+    "mean_reward": 54.312,
+    "mean_interception": 43.01
+  },
+  {
+    "timestep": 16000,
+    "mean_reward": 52.25,
+    "mean_interception": 42.1
+  },
+  {
+    "timestep": 20000,
+    "mean_reward": 102.875,
+    "mean_interception": 53.91
+  },
+  {
+    "timestep": 24000,
+    "mean_reward": 88.062,
+    "mean_interception": 50.62
+  },
+  {
+    "timestep": 28000,
+    "mean_reward": 17.375,
+    "mean_interception": 30.37
+  },
+  {
+    "timestep": 32000,
+    "mean_reward": 35.0,
+    "mean_interception": 34.3
+  },
+  {
+    "timestep": 36000,
+    "mean_reward": 17.562,
+    "mean_interception": 30.44
+  },
+  {
+    "timestep": 40000,
+    "mean_reward": 16.438,
+    "mean_interception": 29.93
+  },
+  {
+    "timestep": 44000,
+    "mean_reward": 110.188,
+    "mean_interception": 55.8
+  },
+  {
+    "timestep": 48000,
+    "mean_reward": 128.375,
+    "mean_interception": 60.07
+  },
+  {
+    "timestep": 52000,
+    "mean_reward": 128.562,
+    "mean_interception": 59.93
+  },
+  {
+    "timestep": 56000,
+    "mean_reward": 128.375,
+    "mean_interception": 59.83
+  },
+  {
+    "timestep": 60000,
+    "mean_reward": 96.312,
+    "mean_interception": 52.32
+  },
+  {
+    "timestep": 64000,
+    "mean_reward": 78.125,
+    "mean_interception": 48.14
+  },
+  {
+    "timestep": 68000,
+    "mean_reward": -34.188,
+    "mean_interception": 19.46
+  },
+  {
+    "timestep": 72000,
+    "mean_reward": 87.312,
+    "mean_interception": 48.45
+  },
+  {
+    "timestep": 76000,
+    "mean_reward": 55.625,
+    "mean_interception": 42.65
+  },
+  {
+    "timestep": 80000,
+    "mean_reward": 24.125,
+    "mean_interception": 28.93
+  },
+  {
+    "timestep": 84000,
+    "mean_reward": 32.562,
+    "mean_interception": 32.71
+  },
+  {
+    "timestep": 88000,
+    "mean_reward": -38.688,
+    "mean_interception": 12.17
+  },
+  {
+    "timestep": 92000,
+    "mean_reward": -49.75,
+    "mean_interception": 7.95
+  },
+  {
+    "timestep": 96000,
+    "mean_reward": -38.312,
+    "mean_interception": 11.48
+  },
+  {
+    "timestep": 100000,
+    "mean_reward": -23.312,
+    "mean_interception": 16.85
+  },
+  {
+    "timestep": 104000,
+    "mean_reward": -27.625,
+    "mean_interception": 14.87
+  },
+  {
+    "timestep": 108000,
+    "mean_reward": -1.562,
+    "mean_interception": 24.04
+  },
+  {
+    "timestep": 112000,
+    "mean_reward": -5.125,
+    "mean_interception": 22.5
+  },
+  {
+    "timestep": 116000,
+    "mean_reward": -9.062,
+    "mean_interception": 23.31
+  },
+  {
+    "timestep": 120000,
+    "mean_reward": -9.062,
+    "mean_interception": 21.69
+  },
+  {
+    "timestep": 124000,
+    "mean_reward": -10.375,
+    "mean_interception": 21.11
+  },
+  {
+    "timestep": 128000,
+    "mean_reward": -6.625,
+    "mean_interception": 23.91
+  },
+  {
+    "timestep": 132000,
+    "mean_reward": -11.875,
+    "mean_interception": 22.6
+  },
+  {
+    "timestep": 136000,
+    "mean_reward": 2.0,
+    "mean_interception": 25.73
+  },
+  {
+    "timestep": 140000,
+    "mean_reward": 4.25,
+    "mean_interception": 26.09
+  },
+  {
+    "timestep": 144000,
+    "mean_reward": -1.562,
+    "mean_interception": 25.12
+  },
+  {
+    "timestep": 148000,
+    "mean_reward": -13.188,
+    "mean_interception": 22.22
+  },
+  {
+    "timestep": 152000,
+    "mean_reward": -13.0,
+    "mean_interception": 21.78
+  },
+  {
+    "timestep": 156000,
+    "mean_reward": -52.188,
+    "mean_interception": 8.45
+  },
+  {
+    "timestep": 160000,
+    "mean_reward": -53.312,
+    "mean_interception": 6.77
+  },
+  {
+    "timestep": 164000,
+    "mean_reward": -3.438,
+    "mean_interception": 21.1
+  },
+  {
+    "timestep": 168000,
+    "mean_reward": 0.875,
+    "mean_interception": 22.36
+  },
+  {
+    "timestep": 172000,
+    "mean_reward": -3.812,
+    "mean_interception": 20.87
+  },
+  {
+    "timestep": 176000,
+    "mean_reward": -13.188,
+    "mean_interception": 18.39
+  },
+  {
+    "timestep": 180000,
+    "mean_reward": -18.625,
+    "mean_interception": 16.99
+  },
+  {
+    "timestep": 184000,
+    "mean_reward": -20.688,
+    "mean_interception": 16.22
+  },
+  {
+    "timestep": 188000,
+    "mean_reward": -40.0,
+    "mean_interception": 11.51
+  },
+  {
+    "timestep": 192000,
+    "mean_reward": -42.438,
+    "mean_interception": 9.86
+  },
+  {
+    "timestep": 196000,
+    "mean_reward": -60.25,
+    "mean_interception": 7.04
+  },
+  {
+    "timestep": 200000,
+    "mean_reward": -52.75,
+    "mean_interception": 6.91
+  }
+]
