@@ -11,18 +11,30 @@ should look next — beating the traditional open-loop round-robin sweep.
 
 ---
 
-## Demo (2 steps)
+## Demo (one command — everything: database + backend + dashboard)
 
 ```powershell
-# 1) Backend  (http://localhost:8000)
+# from the repo root — installs deps if needed, seeds database/spectra.db,
+# starts FastAPI on :8000 and Vite on :5173
+.\run.ps1
+```
+
+Or run the three parts manually (separate terminals):
+
+```powershell
+# 1) Database  (auto-created on first run; seed sample history to populate the UI)
 cd backend
-python -m venv .venv
+.\.venv\Scripts\python -m app.seed_db
+
+# 2) Backend  (http://localhost:8000)
+cd backend
+python -m venv .venv                  # first time only
 .\.venv\Scripts\pip install -r requirements.txt
 .\.venv\Scripts\python -m uvicorn app.main:app --port 8000
 
-# 2) Dashboard (http://localhost:5173)
+# 3) Dashboard  (http://localhost:5173)
 cd frontend
-npm install
+npm install                           # first time only
 npm run dev
 ```
 
