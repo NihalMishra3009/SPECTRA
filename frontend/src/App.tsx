@@ -126,6 +126,22 @@ export default function App() {
             ) : (
               <EmptyHint />
             )}
+            {smart?.model_info && (
+              <div className="mx-1 mb-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 rounded-lg border border-hit/40 bg-hit/5 px-2.5 py-1 text-[11px] text-slate-200">
+                <span className="flex items-center gap-1.5 text-hit">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-hit opacity-60" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-hit" />
+                  </span>
+                  MODEL LIVE
+                </span>
+                <span className="font-mono">{smart.model_info.model_type ?? smart.model_info.scheduler}</span>
+                {smart.model_info.trees ? <span className="num text-dim">{smart.model_info.trees} trees</span> : null}
+                <span className="num text-dim">calls {smart.model_info.predict_calls}</span>
+                <span className="num text-dim">avg {smart.model_info.avg_latency_ms}ms/pred</span>
+                <span className="text-dim">file {smart.model_info.model_file}</span>
+              </div>
+            )}
             {result && <PlaybackControls cur={cur} T={T} playing={playing} speed={speed} onToggle={sim.toggle} onSeek={sim.seek} onSpeed={() => sim.setSpeed([0.5, 1, 2, 4][([0.5, 1, 2, 4].indexOf(speed) + 1) % 4])} />}
           </div>
 

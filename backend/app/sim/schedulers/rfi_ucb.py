@@ -13,6 +13,7 @@ external windowing needed.
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 
 import numpy as np
@@ -73,6 +74,9 @@ class RFIUCBScheduler(BaseScheduler):
         self.model = load_model(artifact) if artifact else None
         self.model_name = Path(artifact).name if artifact and Path(artifact).exists() else None
         self._sweep = 0
+        self._calls = 0
+        self._latency_ms = 0.0
+        self.last_scores: list[float] = []
 
     # ------------------------------------------------------------- features
     def _features(self) -> np.ndarray:
@@ -108,7 +112,11 @@ class RFIUCBScheduler(BaseScheduler):
             return int(np.argmax(ucb))
 
         try:
+            t0 = time.perf_counter()
             prior = _model_active_probas(self.model, self._features())
+            self._latency_ms += (time.perf_counter() - t0) * 1000.0
+            self._calls += 1
+            self.last_scores = [round(float(x), 4) for x in prior]
             score = ucb + self.blend * prior  # ML prior blended into the bandit
             return int(np.argmax(score))
         except Exception:
@@ -123,3 +131,25 @@ class RFIUCBScheduler(BaseScheduler):
             self.since_hit[band] = 0.0
         else:
             self.since_hit[band] += 1.0
+
+    # ------------------------------------------------------------------ status
+    def describe(self) -> dict:
+        """Live model telemetry — surfaced in the response/dashboard as proof
+        that the external model is actually running and answering every step."""
+        info = {
+            "name": self.name,
+            "scheduler": self.__class__.__name__,
+            "model_file": self.model_name,
+            "loaded": self.model is not None,
+            "features": FEATURES,
+            "predict_calls": self._calls,
+            "avg_latency_ms": round(self._latency_ms / max(1, self._calls), 3),
+            "last_scores": self.last_scores,
+        }
+        if self.model is not None:
+            m = self.model
+            info["model_type"] = type(m).__name__
+            info["trees"] = getattr(m, "n_estimators", None)
+            info["max_depth"] = getattr(m, "max_depth", None)
+            info["n_features"] = getattr(m, "n_features_in_", None)
+        return info

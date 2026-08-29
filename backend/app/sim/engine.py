@@ -202,6 +202,7 @@ def run_simulation(config: SimConfig) -> dict:
             "log": smart_log,
             "metrics": smart_metrics.to_dict(),
             "priorities": priorities,
+            "model_info": getattr(smart, "describe", lambda: None)(),
         },
         "meta": {
             "n_bands": config.n_bands,

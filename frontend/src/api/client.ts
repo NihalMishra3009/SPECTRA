@@ -21,12 +21,28 @@ export type Metrics = {
   correct_predictions_pct: number
 }
 
+export type ModelInfo = {
+  name?: string
+  scheduler?: string
+  model_file?: string
+  loaded?: boolean
+  model_type?: string
+  trees?: number | null
+  max_depth?: number | null
+  n_features?: number | null
+  features?: string[]
+  predict_calls?: number
+  avg_latency_ms?: number
+  last_scores?: number[]
+}
+
 export type ScannerResult = {
   label: string
   scheduler: string
   log: StepLog[]
   metrics: Metrics
   priorities?: number[][]
+  model_info?: ModelInfo | null
 }
 
 export type SimEvent = {
