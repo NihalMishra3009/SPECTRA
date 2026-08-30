@@ -77,6 +77,10 @@ class RFIUCBScheduler(BaseScheduler):
         self._calls = 0
         self._latency_ms = 0.0
         self.last_scores: list[float] = []
+        # per-step telemetry for the live dashboard
+        self.last_prior: list[float] = []
+        self.last_ucb: list[float] = []
+        self.last_score: list[float] = []
 
     # ------------------------------------------------------------- features
     def _features(self) -> np.ndarray:
@@ -118,8 +122,12 @@ class RFIUCBScheduler(BaseScheduler):
             self._calls += 1
             self.last_scores = [round(float(x), 4) for x in prior]
             score = ucb + self.blend * prior  # ML prior blended into the bandit
+            self.last_prior = [round(float(x), 4) for x in prior]
+            self.last_ucb = [round(float(x), 4) for x in ucb]
+            self.last_score = [round(float(x), 4) for x in score]
             return int(np.argmax(score))
         except Exception:
+            self.last_score = [round(float(x), 4) for x in ucb]
             return int(np.argmax(ucb))
 
     def update(self, band: int, hit: bool, t: int) -> None:

@@ -1,11 +1,17 @@
 from __future__ import annotations
 
 from .emitter import Emitter
+from .tsrd import tsrd_emitters
 
 # --------------------------------------------------------------------------
 # The 12 operating scenarios from the problem document.
 # Each returns the emitter set that defines the ground-truth RF environment.
 # --------------------------------------------------------------------------
+
+
+def s_tsrd(n: int = 10, steps: int = 300, seed: int = 42) -> list[Emitter]:
+    """Realistic multi-band environment derived from the TSRD dataset."""
+    return tsrd_emitters(n_bands=n, n_steps=steps, seed=seed)
 
 
 def s1_stable(n: int = 10, steps: int = 300) -> list[Emitter]:
@@ -174,6 +180,11 @@ SCENARIOS: dict[str, dict] = {
         "label": "Demo: Stable + Switch + Surprise",
         "desc": "The 3-stage crowd-pleaser (Stages 1-3)",
         "fun": s2_switch,  # reuse switch: it already contains the surprise & change
+    },
+    "tsrd": {
+        "label": "TSRD · 10 real reference bands",
+        "desc": "Emission profiles derived from the TSRD radar dataset (UCB1 + RF focus)",
+        "fun": s_tsrd,
     },
 }
 

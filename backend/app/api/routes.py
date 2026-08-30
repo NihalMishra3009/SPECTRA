@@ -10,6 +10,7 @@ from ..config import DEFAULT_DEMO, SCHEDULERS, SimConfig
 from ..db import get_run, list_runs, save_run, stats
 from ..sim.engine import run_simulation, run_writer
 from ..sim.scenarios import scenario_catalog
+from ..sim.tsrd import tsrd_band_meta
 from ..train import ARTIFACTS_DIR, MODEL_REGISTRY
 
 router = APIRouter()
@@ -18,6 +19,12 @@ router = APIRouter()
 @router.get("/api/health")
 def health() -> dict:
     return {"status": "ok", "service": "SPECTRA EW scheduler"}
+
+
+@router.get("/api/tsrd/bands")
+def tsrd_bands() -> dict:
+    """Per-band reference stats for the 10 TSRD-derived bands."""
+    return {"bands": tsrd_band_meta()}
 
 
 @router.get("/api/scenarios")
@@ -107,7 +114,7 @@ async def ws_simulate(ws: WebSocket) -> None:
     try:
         for ev in run_writer(cfg):
             await ws.send_json(ev)
-            await asyncio.sleep(0.02)
+            await asyncio.sleep(cfg.step_ms / 1000.0)
     except Exception:
         pass
     finally:

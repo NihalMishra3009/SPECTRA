@@ -2,15 +2,13 @@ import { motion } from 'framer-motion'
 
 type Props = {
   scenarioLabel: string
-  scheduler: string
   playing: boolean
-  onDemo: () => void
-  demoActive: boolean
-  smartAlgo: string | null
   isMock?: boolean
+  source: 'live' | 'replay' | null
+  modelType?: string | null
 }
 
-export default function TopBar({ scenarioLabel, scheduler, playing, onDemo, demoActive, smartAlgo, isMock }: Props) {
+export default function TopBar({ scenarioLabel, playing, isMock, source, modelType }: Props) {
   return (
     <motion.header
       initial={{ opacity: 0, y: -10 }}
@@ -27,28 +25,25 @@ export default function TopBar({ scenarioLabel, scheduler, playing, onDemo, demo
           <h1 className="font-display text-lg font-bold leading-none tracking-tight text-slate-50">
             SPECTRA
           </h1>
-          <p className="text-[11px] tracking-widest text-dim uppercase">EW Smart Scan · SIH 26055</p>
+          <p className="text-[11px] tracking-widest text-dim uppercase">UCB1 + Random Forest · EW Smart Scan</p>
         </div>
       </div>
 
-      <div className="hidden items-center gap-2 md:flex">
+      <div className="hidden items-center gap-2 lg:flex">
         <Chip label="scenario" value={scenarioLabel} accent="text-neon2" />
-        <Chip label="scheduler" value={scheduler} accent="text-amber" />
-        {smartAlgo && <Chip label="model" value={smartAlgo} accent="text-hit" />}
+        <Chip label="algorithm" value="UCB1 + Random Forest" accent="text-amber" />
+        {modelType && <Chip label="model" value={modelType} accent="text-hit" />}
+        {source === 'live' && <Chip label="feed" value="live ws" accent="text-hit" />}
+        {source === 'replay' && <Chip label="feed" value="replay" accent="text-neon" />}
         {isMock && <Chip label="source" value="offline mock" accent="text-violet-300" />}
       </div>
 
-      <div className="flex items-center gap-3">
-        <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] ${playing ? 'border-hit/60 bg-hit/10 text-hit' : 'border-line bg-inner/50 text-dim'}`}>
-          <span className={`relative flex h-2 w-2 ${playing ? '' : 'opacity-40'}`}>
-            {playing && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-hit opacity-60" />}
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-current" />
-          </span>
-          {playing ? 'LIVE' : 'READY'}
-        </div>
-        <button onClick={onDemo} className={`btn ${demoActive ? 'btn-primary' : 'btn-ghost'}`}>
-          ▶ DEMO MODE
-        </button>
+      <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] ${playing ? 'border-hit/60 bg-hit/10 text-hit' : 'border-line bg-inner/50 text-dim'}`}>
+        <span className={`relative flex h-2 w-2 ${playing ? '' : 'opacity-40'}`}>
+          {playing && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-hit opacity-60" />}
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-current" />
+        </span>
+        {playing ? 'LIVE' : 'READY'}
       </div>
     </motion.header>
   )

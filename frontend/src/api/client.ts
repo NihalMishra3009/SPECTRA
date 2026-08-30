@@ -63,6 +63,7 @@ export type SimConfig = {
   epsilon: number
   window: number
   floor: number
+  step_ms: number
 }
 
 export type SimResult = {
@@ -79,6 +80,34 @@ export type SimResult = {
   baseline: ScannerResult
   smart: ScannerResult
   meta: { n_bands: number; n_steps: number; seed: number; alpha: number; epsilon: number }
+}
+
+export type TsrdBand = {
+  band: number
+  config_id: string
+  center_mhz: number
+  freq_min_mhz: number
+  freq_max_mhz: number
+  n_pulses: number
+  n_emitters: number
+  n_types: number
+  pulse_width_us: number
+  aoa_deg: number
+  amplitude_dbm: number
+  duty: number
+}
+
+export type LiveEvent = {
+  t: number
+  truth: boolean[]
+  baseline: { band: number; hit: boolean; snr: number }
+  smart: { band: number; hit: boolean; snr: number }
+  prior?: number[]
+  ucb?: number[]
+  scores?: number[]
+  priorities?: number[]
+  model?: ModelInfo | null
+  event?: SimEvent | null
 }
 
 export type ScenarioMeta = { id: string; label: string; desc: string }
@@ -135,10 +164,12 @@ async function j<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  health: () => j<{ status: string }>('/api/health'),
   scenarios: () => j<{ scenarios: ScenarioMeta[] }>('/api/scenarios'),
   schedulers: () => j<{ schedulers: SchedulerMeta[] }>('/api/schedulers'),
   models: () => j<{ models: ModelStatus[] }>('/api/models'),
   curves: (name: string) => j<unknown[]>(`/api/curves/${name}`),
+  tsrdBands: () => j<{ bands: TsrdBand[] }>('/api/tsrd/bands'),
   // Bundled offline fixture (served from public/mock — works with no backend).
   mock: () =>
     fetch(`${BASE}/mock/demo.json`).then((r) => {

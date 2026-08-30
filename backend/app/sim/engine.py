@@ -11,6 +11,17 @@ from .receiver import Receiver
 from .scenarios import get_emitters, scenario_catalog
 
 
+def _norm_scores(arr) -> list[float]:
+    """Min-max normalise a score vector to 0..100 (dashboard priority display)."""
+    a = np.asarray(list(arr or []), dtype=float)
+    if a.size == 0:
+        return []
+    lo, hi = float(a.min()), float(a.max())
+    if hi - lo < 1e-9:
+        return [round(50.0, 1) for _ in a]
+    return [round(100.0 * (float(v) - lo) / (hi - lo), 1) for v in a]
+
+
 def make_scheduler(scheduler_id: str, config: SimConfig, seed: int, n_bands: int):
     """Instantiates the requested scheduler (bandit / RL / sequence / baseline)."""
     from .schedulers import (  # local import avoids hard SB3/torch dependency at boot
@@ -88,8 +99,11 @@ def _run_single(
         band = int(scheduler.select(t))
         hit, snr = rx.observe(band, t)
         scheduler.update(band, hit, t)
-        if priority_track is not None and hasattr(scheduler, "q"):
-            priority_track.append(np.asarray(scheduler.q, dtype=float).copy())
+        if priority_track is not None:
+            if getattr(scheduler, "last_score", None):
+                priority_track.append(_norm_scores(scheduler.last_score))
+            elif hasattr(scheduler, "q"):
+                priority_track.append(np.asarray(scheduler.q, dtype=float).copy())
         log.append(
             {
                 "t": int(t),
@@ -173,7 +187,7 @@ def run_simulation(config: SimConfig) -> dict:
         e["ratio"] = smart_curve[i]
 
     # optional smart priority trajectory (belief heatmap)
-    priorities = [row.tolist() for row in smart_q] if smart_q else None
+    priorities = smart_q or None
 
     sc = scenario_catalog()
     sc_meta = next((s for s in sc if s["id"] == config.scenario), {"label": config.scenario})
@@ -243,11 +257,19 @@ def run_writer(config: SimConfig):
         sh, ssnr = rxs.observe(sb, t)
         base.update(bb, bh, t)
         smart.update(sb, sh, t)
+        prior = getattr(smart, "last_prior", [])
+        ucb = getattr(smart, "last_ucb", [])
+        score = getattr(smart, "last_score", [])
         yield {
             "t": t,
             "truth": env.ground_truth[t].tolist(),
             "baseline": {"band": bb, "hit": bh, "snr": round(float(bsnr), 3)},
             "smart": {"band": sb, "hit": sh, "snr": round(float(ssnr), 3)},
+            "prior": prior,
+            "ucb": ucb,
+            "scores": score,
+            "priorities": _norm_scores(score),  # blended UCB1+RF score -> 0..100
+            "model": getattr(smart, "describe", lambda: None)(),
             "event": sw_tracker.step(t, env.ground_truth[t]),
         }
 
